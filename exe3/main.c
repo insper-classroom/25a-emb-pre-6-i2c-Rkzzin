@@ -10,7 +10,7 @@
 #include "hardware/i2c.h"
 #include "mpu6050.h"
 
-const int I2C_CHIP_ADDRESS = 0x68;
+const int I2C_CHIP_ADDRESS = 0x76;
 const int I2C_SDA_GPIO = 20;
 const int I2C_SCL_GPIO = 21;
 
@@ -22,7 +22,10 @@ void i2c_task(void *p) {
     gpio_pull_up(I2C_SCL_GPIO);
 
     // TODO
-    // read id chip BMP280
+    // read id chip BMP280, should print 0x58
+    uint8_t buffer[1];
+    i2c_write_blocking(i2c_default, I2C_CHIP_ADDRESS, (uint8_t[]){0xD0}, 1, true);
+    i2c_read_blocking(i2c_default, I2C_CHIP_ADDRESS, buffer, 1, false);
     printf("BMP280 ID: 0x%X \n", buffer[0]);
 
     while (1) {
